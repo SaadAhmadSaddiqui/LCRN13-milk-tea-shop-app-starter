@@ -9,8 +9,11 @@ import {
 } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { COLORS, FONTS, SIZES, icons } from "../../constants";
+import { connect } from "react-redux";
+import { toggleTheme } from "../../store/theme/actions";
+import { hs, ws } from "../../utils/PixelSizes";
 
-const HeaderBar = () => {
+const HeaderBar = ({ appTheme, toggleTheme }) => {
   return (
     <SafeAreaView style={styles.safeAreaViewContainer}>
       <View style={styles.headerContentContainer}>
@@ -20,13 +23,28 @@ const HeaderBar = () => {
           <Text style={styles.font}>Welcome Back!</Text>
         </View>
         {/* Toggle Button */}
-        <TouchableOpacity style={styles.toggleButton}>
+        <TouchableOpacity
+          style={styles.toggleButton}
+          onPress={() =>
+            toggleTheme(appTheme.name === "light" ? "dark" : "light")
+          }
+        >
           {/* Sun */}
-          <View style={[styles.themeIcon, styles.selectedLightModeStyle]}>
+          <View
+            style={[
+              styles.themeIcon,
+              appTheme.name === "light" ? styles.selectedLightModeStyle : {},
+            ]}
+          >
             <Image source={icons.sunny} style={styles.image}></Image>
           </View>
           {/* Moon */}
-          <View style={[styles.themeIcon, styles.selectedNightModeStyle]}>
+          <View
+            style={[
+              styles.themeIcon,
+              appTheme.name === "dark" ? styles.selectedNightModeStyle : {},
+            ]}
+          >
             <Image source={icons.night} style={styles.image}></Image>
           </View>
         </TouchableOpacity>
@@ -35,22 +53,34 @@ const HeaderBar = () => {
   );
 };
 
-export default HeaderBar;
+const mapStateToProps = (state) => {
+  return {
+    appTheme: state.appTheme,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    toggleTheme: (themeType) => dispatch(toggleTheme(themeType)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderBar);
 
 const styles = EStyleSheet.create({
   safeAreaViewContainer: {
-    height: 150,
+    height: hs[140],
     width: "100%",
     backgroundColor: COLORS.purple,
   },
   headerContentContainer: {
     flexDirection: "row",
-    marginTop: Platform.OS === "android" ? SIZES.padding + 1 : 0,
+    marginTop: Platform.OS === "android" ? hs[SIZES.padding] : 0,
     alignItems: "center",
   },
   greetingsContainer: {
     flex: 1,
-    paddingLeft: SIZES.padding,
+    paddingLeft: ws[SIZES.padding],
   },
   font: { color: COLORS.white, ...FONTS.h2 },
   toggleButton: {
@@ -58,27 +88,27 @@ const styles = EStyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-end",
     marginHorizontal: SIZES.padding,
-    height: 40,
-    borderRadius: 20,
+    height: hs[40],
+    borderRadius: ws[20],
     backgroundColor: COLORS.lightPurple,
   },
   themeIcon: {
-    width: 40,
-    height: 40,
+    width: ws[40],
+    height: hs[40],
     alignItems: "center",
     justifyContent: "center",
   },
   image: {
-    height: 30,
-    width: 30,
+    height: hs[30],
+    width: ws[30],
     tintColor: COLORS.white,
   },
   selectedNightModeStyle: {
-    borderRadius: 20,
+    borderRadius: ws[20],
     backgroundColor: COLORS.black,
   },
   selectedLightModeStyle: {
-    borderRadius: 20,
+    borderRadius: ws[20],
     backgroundColor: COLORS.yellow,
   },
 });
