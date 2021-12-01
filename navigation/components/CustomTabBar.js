@@ -1,13 +1,9 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import {
-  BottomTabBar,
-  BottomTabBarHeightContext,
-} from "@react-navigation/bottom-tabs";
+import { StyleSheet, View } from "react-native";
+import { BottomTabBar } from "@react-navigation/bottom-tabs";
 import { COLORS } from "../../constants";
 
 const CustomTabBar = (props) => {
-  console.log(BottomTabBarHeightContext);
   return (
     <View>
       <View style={styles.tabBarContainer}>
