@@ -7,10 +7,12 @@ import {
   ScrollView,
 } from "react-native";
 import { connect } from "react-redux";
-import HeaderBar from "../components/HeaderBar";
-import { COLORS, SIZES } from "../constants";
-import { hs, ws } from "../utils/PixelSizes";
+import HeaderBar from "../../components/HeaderBar";
+import { COLORS, SIZES } from "../../constants";
+import { hs, ws } from "../../utils/PixelSizes";
 import EStyleSheet from "react-native-extended-stylesheet";
+import Rewards from "./components/Rewards";
+import PromoDeals from "./components/PromoDeals";
 
 const Home = ({ appTheme, navigation }) => {
   return (
@@ -21,7 +23,15 @@ const Home = ({ appTheme, navigation }) => {
           styles.scrollView,
           { backgroundColor: appTheme.backgroundColor },
         ]}
-      ></ScrollView>
+        contentContainerStyle={{
+          paddingBottom: hs[150],
+        }}
+      >
+        {/* Rewards */}
+        <Rewards navigation={navigation}></Rewards>
+        {/* Promo */}
+        <PromoDeals></PromoDeals>
+      </ScrollView>
     </View>
   );
 };
