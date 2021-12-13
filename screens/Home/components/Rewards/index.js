@@ -1,8 +1,8 @@
 import React from "react";
 import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
-import { COLORS, FONTS, icons, SIZES } from "../../../constants";
-import { hs, ws } from "../../../utils/PixelSizes";
+import { COLORS, FONTS, icons, SIZES } from "../../../../constants";
+import { hs, ws } from "../../../../utils/PixelSizes";
 
 const Rewards = ({ navigation }) => {
   return (
