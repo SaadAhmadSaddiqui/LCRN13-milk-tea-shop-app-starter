@@ -1,14 +1,8 @@
 import React from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import { View, ScrollView } from "react-native";
 import { connect } from "react-redux";
 import HeaderBar from "../../components/HeaderBar";
-import { COLORS, SIZES } from "../../constants";
+import { SIZES } from "../../constants";
 import { hs, ws } from "../../utils/PixelSizes";
 import EStyleSheet from "react-native-extended-stylesheet";
 import Rewards from "./components/Rewards";
@@ -30,7 +24,7 @@ const Home = ({ appTheme, navigation }) => {
         {/* Rewards */}
         <Rewards navigation={navigation}></Rewards>
         {/* Promo */}
-        <PromoDeals></PromoDeals>
+        <PromoDeals appTheme={appTheme}></PromoDeals>
       </ScrollView>
     </View>
   );
