@@ -1,47 +1,100 @@
-import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import React, { createRef, useEffect, useRef, useState } from "react";
+import { Text, TouchableOpacity, View, Animated } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { connect } from "react-redux";
 import { constants, COLORS, FONTS, SIZES } from "../../../../../constants";
 import { hs, ws } from "../../../../../utils/PixelSizes";
 
-const promoTabs = constants.promoTabs;
+const promoTabs = constants.promoTabs.map((promoTab) => {
+  return {
+    ...promoTab,
+    ref: createRef(),
+  };
+});
 
-const TabIndicator = ({}) => {
+const TabIndicator = ({ measureLayout, scrollX }) => {
+  const inputRange = promoTabs.map((_, i) => i * SIZES.width);
+
+  const tabIndicatorWidth = scrollX.interpolate({
+    inputRange,
+    outputRange: measureLayout.map((item) => item.width),
+  });
+
+  const translateX = scrollX.interpolate({
+    inputRange,
+    outputRange: measureLayout.map((item) => item.x),
+  });
+
   return (
-    <View
+    <Animated.View
       style={{
         position: "absolute",
         height: "100%",
-        width: ws[100],
+        width: tabIndicatorWidth,
         left: 0,
         borderRadius: ws[SIZES.radius],
         backgroundColor: COLORS.primary,
+        transform: [{ translateX }],
       }}
-    ></View>
+    ></Animated.View>
   );
 };
 
-const Tabs = ({ appTheme }) => {
+const Tabs = ({ appTheme, scrollX, onPromoTabPress }) => {
+  const [measureLayout, setMeasureLayout] = useState([]);
+  const containerRef = useRef();
+
+  const tabPosition = Animated.divide(scrollX, SIZES.width);
+
+  useEffect(() => {
+    let ml = [];
+    promoTabs.forEach((promo) => {
+      promo.ref.current.measureLayout(
+        containerRef.current,
+        (x, y, width, height) => {
+          ml.push({
+            x,
+            y,
+            width,
+            height,
+          });
+
+          if (ml.length === promoTabs.length) {
+            setMeasureLayout(ml);
+          }
+        }
+      );
+    });
+  }, [containerRef.current]);
+
   return (
     <View
+      ref={containerRef}
       style={[
         styles.tabsContainer,
         { backgroundColor: appTheme.tabBackgroundColor },
       ]}
     >
       {/* Tab Indicator */}
-      <TabIndicator></TabIndicator>
+      {measureLayout.length > 0 && (
+        <TabIndicator measureLayout={measureLayout} scrollX={scrollX} />
+      )}
+
       {/* Tabs */}
       {promoTabs.map((item, index) => {
+        const textColor = tabPosition.interpolate({
+          inputRange: [index - 1, index, index + 1],
+          outputRange: [COLORS.lightGray2, COLORS.white, COLORS.lightGray2],
+          extrapolate: "clamp",
+        });
+
         return (
           <TouchableOpacity
             key={`PromoTab-${index}`}
-            onPress={() => {
-              console.log(item);
-            }}
+            onPress={() => onPromoTabPress(index)}
           >
             <View
+              ref={item.ref}
               style={{
                 paddingHorizontal: ws[20],
                 alignItems: "center",
@@ -49,9 +102,9 @@ const Tabs = ({ appTheme }) => {
                 height: hs[40],
               }}
             >
-              <Text style={{ color: COLORS.white, ...FONTS.h3 }}>
+              <Animated.Text style={{ color: textColor, ...FONTS.h3 }}>
                 {item.title}
-              </Text>
+              </Animated.Text>
             </View>
           </TouchableOpacity>
         );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useRef } from "react";
 import { View, ScrollView } from "react-native";
 import { connect } from "react-redux";
 import HeaderBar from "../../components/HeaderBar";
@@ -9,6 +9,14 @@ import Rewards from "./components/Rewards";
 import PromoDeals from "./components/PromoDeals";
 
 const Home = ({ appTheme, navigation }) => {
+  const promoScrollViewRef = useRef();
+
+  const onPromoTabPress = useCallback((promoTabIndex) => {
+    promoScrollViewRef?.current?.scrollToOffset({
+      offset: promoTabIndex * SIZES.width,
+    });
+  });
+
   return (
     <View style={styles.container}>
       <HeaderBar></HeaderBar>
@@ -24,7 +32,11 @@ const Home = ({ appTheme, navigation }) => {
         {/* Rewards */}
         <Rewards navigation={navigation}></Rewards>
         {/* Promo */}
-        <PromoDeals appTheme={appTheme}></PromoDeals>
+        <PromoDeals
+          appTheme={appTheme}
+          promoScrollViewRef={promoScrollViewRef}
+          onPromoTabPress={onPromoTabPress}
+        ></PromoDeals>
       </ScrollView>
     </View>
   );

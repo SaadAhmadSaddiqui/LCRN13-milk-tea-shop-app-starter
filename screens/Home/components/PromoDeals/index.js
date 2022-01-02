@@ -8,16 +8,17 @@ import { ws, hs, fs } from "../../../../utils/PixelSizes";
 import { COLORS, FONTS, images, SIZES } from "../../../../constants";
 import { useNavigation } from "@react-navigation/native";
 
-const PromoDeals = ({ appTheme }) => {
+const PromoDeals = ({ appTheme, promoScrollViewRef, onPromoTabPress }) => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const navigator = useNavigation();
 
   return (
     <View style={styles.promosContainer}>
       {/* Header - Tabs */}
-      <Tabs></Tabs>
+      <Tabs scrollX={scrollX} onPromoTabPress={onPromoTabPress}></Tabs>
       {/* Details */}
       <Animated.FlatList
+        ref={promoScrollViewRef}
         data={dummyData.promos}
         horizontal
         pagingEnabled
@@ -29,7 +30,7 @@ const PromoDeals = ({ appTheme }) => {
           [{ nativeEvent: { contentOffset: { x: scrollX } } }],
           { useNativeDriver: false }
         )}
-        renderItem={({ item, index }) => {
+        renderItem={({ item }) => {
           return (
             <View
               style={{
