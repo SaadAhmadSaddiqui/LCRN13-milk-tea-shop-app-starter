@@ -17,27 +17,27 @@ const store = createStore(themeReducer, applyMiddleware(thunk));
 EStyleSheet.build();
 
 const App = () => {
-  React.useEffect(() => {
-    SplashScreen.hide();
-  }, []);
+	React.useEffect(() => {
+		SplashScreen.hide();
+	}, []);
 
-  return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-          }}
-          initialRouteName={"Home"}
-        >
-          <Stack.Screen name="Home" component={Tabs} />
-          <Stack.Screen name="Location" component={Location} />
-          <Stack.Screen name="Order" component={Order} />
-          <Stack.Screen name="OrderDetail" component={OrderDetail} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </Provider>
-  );
+	return (
+		<Provider store={store}>
+			<NavigationContainer>
+				<Stack.Navigator
+					screenOptions={{
+						headerShown: false,
+					}}
+					initialRouteName={"Home"}
+				>
+					<Stack.Screen name="Home" component={Tabs} />
+					<Stack.Screen name="Location" component={Location} />
+					<Stack.Screen name="Order" component={Order} />
+					<Stack.Screen name="OrderDetail" component={OrderDetail} />
+				</Stack.Navigator>
+			</NavigationContainer>
+		</Provider>
+	);
 };
 
 export default App;
