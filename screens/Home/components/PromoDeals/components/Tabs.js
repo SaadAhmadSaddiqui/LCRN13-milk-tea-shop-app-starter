@@ -42,9 +42,11 @@ const TabIndicator = ({ measureLayout, scrollX }) => {
 };
 
 TabIndicator.propTypes = {
-	measureLayout: PropTypes.shape({
-		map: PropTypes.func,
-	}),
+	measureLayout: PropTypes.arrayOf(
+		PropTypes.shape({
+			map: PropTypes.func,
+		})
+	),
 	scrollX: PropTypes.shape({
 		interpolate: PropTypes.func,
 	}),

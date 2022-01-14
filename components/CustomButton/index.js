@@ -3,14 +3,7 @@ import React from "react";
 import { Text, TouchableOpacity } from "react-native";
 import { COLORS } from "../../constants";
 
-const CustomButton = ({
-	containerStyle,
-	labelStyle,
-	label,
-	onPress,
-	primaryButton,
-	secondaryButton,
-}) => {
+const CustomButton = ({ containerStyle, labelStyle, label, onPress, primaryButton, secondaryButton }) => {
 	return (
 		<TouchableOpacity
 			style={{
@@ -38,10 +31,10 @@ const CustomButton = ({
 CustomButton.propTypes = {
 	containerStyle: PropTypes.shape({}),
 	label: PropTypes.string,
-	labelStyle: PropTypes.string,
+	labelStyle: PropTypes.shape({}),
 	onPress: PropTypes.func,
 	primaryButton: PropTypes.bool,
-	secondaryButton: PropTypes.bool
+	secondaryButton: PropTypes.bool,
 };
 
 export default CustomButton;
